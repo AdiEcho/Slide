@@ -222,8 +222,7 @@ func CalTT(t, n string, e []int64) string {
 	for i := 0; i < len(n); i += 2 {
 		r := n[i : i+2]
 		c, _ := strconv.ParseInt(r, 16, 10)
-		m := string(c) //这一段ide可能会报错，由于不想多次转换类型所以没改，要是受不了的话可以注释并使用下面一段
-		//m := string(rune(int(c)))
+		m := string(int32(c))
 		l := (s*c*c + a*c + u) % int64(len(t))
 		o = o[:l] + m + o[l:]
 	}
