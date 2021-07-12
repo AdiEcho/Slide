@@ -70,7 +70,8 @@ func GetSC(g *Geetest) int64 {
 
 // GetCaptchaType 流程的第二步，获取验证码类型
 func GetCaptchaType(g *Geetest) (string, string, string) {
-	w := g.CalW(Function.CalA(g.C, g.S, g.GT, g.Challenge), true)
+	//w := g.CalW(Function.CalA(g.C, g.S, g.GT, g.Challenge), true)
+	w := g.CalW(Function.CalA(), true)
 	url := "https://api.geetest.com/ajax.php"
 	res, err := client.R().
 		SetHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.64").
@@ -138,10 +139,15 @@ func GetFullBG(g *Geetest) (string, string, string) {
 func (g Geetest) CalW(text string, flag bool) string {
 	EncSecKey := ""
 	if !flag {
-		EncSecKey := Encrypt.RSAEncrypt(Encrypt.CreateSecretKey())
-		encTextByte := Encrypt.AESEncrypt([]byte(text), Encrypt.CreateSecretKey())
-		encText := Encrypt.BytesToString(encTextByte)
-		return encText + EncSecKey
+		secKey := Encrypt.CreateSecretKey()
+		if len(secKey) == 16 {
+			EncSecKey := Encrypt.RSAEncrypt(secKey)
+			encTextByte := Encrypt.AESEncrypt([]byte(text), secKey)
+			encText := Encrypt.BytesToString(encTextByte)
+			return encText + EncSecKey
+		} else {
+			return g.CalW(text, flag)
+		}
 	}
 	encTextByte := Encrypt.AESEncrypt([]byte(text), Encrypt.CreateSecretKey())
 	encText := Encrypt.BytesToString(encTextByte)
