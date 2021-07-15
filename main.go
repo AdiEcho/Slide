@@ -27,7 +27,12 @@ func GetGtChallenge() {
 		GT:        gt,
 		Challenge: challenge,
 	}
-	Geetest.GetFullBG(&g)
+	status, CaptchaType, errorDetail := Geetest.GetFullBG(&g)
+	if status == "success" {
+		color.Infoln("验证码类型：", CaptchaType, "")
+	} else {
+		color.Errorln("获取图片失败   Err: ", status, " ErrorDetail:", errorDetail)
+	}
 }
 
 func main() {
