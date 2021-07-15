@@ -134,7 +134,7 @@ func GetFullBG(g *Geetest) (string, string, string) {
 	return "unknownError", "", "GetFullBG直接跳过了计算"
 }
 
-// CalW 计算W
+// CalW 计算validate前需要提交的W参数
 func (g Geetest) CalW(text string, flag bool) string {
 	EncSecKey := ""
 	if !flag {
